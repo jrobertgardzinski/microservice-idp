@@ -27,6 +27,16 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs, urlencode
 
+SERVICE = "idp"
+
+def log(level, message):
+    """The stack's shared log line (observability/README.md in the aggregator repo): ISO
+    time, level, cid/trace placeholders (this stdlib stack sets neither), service, message."""
+    from datetime import datetime, timezone
+    stamp = datetime.now(timezone.utc).astimezone().isoformat(timespec="milliseconds")
+    print(f"{stamp} {level:<5} [cid=-] [trace=-] {SERVICE} - {message}", flush=True)
+
+
 ISSUER = os.environ.get("IDP_ISSUER", "http://localhost:8090")
 CLIENT_ID = os.environ.get("IDP_CLIENT_ID", "demo-client")
 CLIENT_SECRET = os.environ.get("IDP_CLIENT_SECRET", "demo-secret")
@@ -188,10 +198,10 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def log_message(self, fmt, *args):
-        print(f"idp: {self.command} {urlparse(self.path).path}")
+        log("INFO", f"{self.command} {urlparse(self.path).path}")
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8090"))
-    print(f"stub identity provider listening on {port} (issuer={ISSUER}, client_id={CLIENT_ID})")
+    log("INFO", f"stub identity provider listening on {port} (issuer={ISSUER}, client_id={CLIENT_ID})")
     ThreadingHTTPServer(("", port), Handler).serve_forever()
