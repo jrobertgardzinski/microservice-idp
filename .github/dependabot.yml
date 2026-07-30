@@ -1,0 +1,48 @@
+version: 2
+
+# Added 2026-07-30. This repository had NO Dependabot configuration at all, so nothing here was ever
+# offered an update: not the workflow pins, not the base image, not the dependency tree. The estate's
+# images and action pins had frozen at what was current when they were typed (postgres 16 from 2023,
+# actions/checkout@v4 while v7 shipped), and the reason was always the same — no bot was looking.
+#
+# Same rhythm as the rest of the estate: weekly, patches grouped into ONE pull request, minor and
+# major left ungrouped for a person to decide. Limit 10, because a truncated queue is
+# indistinguishable from an empty one.
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Warsaw
+    open-pull-requests-limit: 10
+    labels: ["dependencies"]
+    groups:
+      patches:
+        patterns: ["*"]
+        update-types: ["patch"]
+
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Warsaw
+    open-pull-requests-limit: 10
+    labels: ["dependencies"]
+    groups:
+      patches:
+        patterns: ["*"]
+        update-types: ["patch"]
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Warsaw
+    open-pull-requests-limit: 10
+    labels: ["dependencies"]
