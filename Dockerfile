@@ -1,6 +1,6 @@
 # Stub OIDC provider — Python stdlib only, no dependencies. Lets the stack demo social login
 # without a real Google client; microservice-security's OAuth adapter only changes URLs.
-FROM python:3.12-slim
+FROM python:3.14-slim
 WORKDIR /app
 COPY server.py .
 # Drop root, like the image encoder this service is modelled on. The divergence was an
